@@ -1,62 +1,73 @@
-// Create a web server that listens on port 3000 and has the following routes:
-// - GET /comments - returns a list of all comments
-// - POST /comments - creates a new comment
-// - GET /comments/:id - returns a single comment with the id matching the route parameter
-// - PUT /comments/:id - updates a comment with the id matching the route parameter
-// - DELETE /comments/:id - deletes a comment with the id matching the route parameter
+/**
+ * @fileoverview A simple Express web server that handles GET, POST, PUT, and DELETE requests.
+ */
 
-let express = require('express');
-let bodyParser = require('body-parser');
-let app = express();
-let comments = [];
-let nextId = 1;
+const express = require('express');
 
-app.use(bodyParser.json());
+const app = express();
+const port = 3000;
 
-app.get('/comments', (req, res) => {
-  res.json(comments);
+app.use(express.json());
+
+/**
+ * Handles GET requests to the root URL.
+ * @name get/
+ * @function
+ * @memberof module:express.Router
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {void}
+ */
+app.get('/', (req, res) => {
+    res.send('GET request received');
 });
 
-app.post('/comments', (req, res) => {
-  let comment = req.body;
-  comment.id = nextId++;
-  comments.push(comment);
-  res.status(201).json(comment);
+/**
+ * Handles POST requests to the root URL.
+ * @name post/
+ * @function
+ * @memberof module:express.Router
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {void}
+ */
+app.post('/', (req, res) => {
+    res.send('POST request received');
 });
 
-app.get('/comments/:id', (req, res) => {
-  let id = parseInt(req.params.id);
-  let comment = comments.find(c => c.id === id);
-  if (comment) {
-    res.json(comment);
-  } else {
-    res.status(404).json({ error: 'Comment not found' });
-  }
+/**
+ * Handles PUT requests to the root URL.
+ * @name put/
+ * @function
+ * @memberof module:express.Router
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {void}
+ */
+app.put('/', (req, res) => {
+    res.send('PUT request received');
 });
 
-app.put('/comments/:id', (req, res) => {
-  let id = parseInt(req.params.id);
-  let comment = comments.find(c => c.id === id);
-  if (comment) {
-    comment.author = req.body.author;
-    comment.text = req.body.text;
-    res.json(comment);
-  } else {
-    res.status(404).json({ error: 'Comment not found' });
-  }
+/**
+ * Handles DELETE requests to the root URL.
+ * @name delete/
+ * @function
+ * @memberof module:express.Router
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {void}
+ */
+app.delete('/', (req, res) => {
+    res.send('DELETE request received');
 });
 
-app.delete('/comments/:id', (req, res) => {
-  let id = parseInt(req.params.id);
-  let index = comments.findIndex(c => c.id === id);
-  if (index !== -1) {
-    comments.splice(index, 1);
-    res.status(204).end();
-  } else {
-    res.status(404).json({ error: 'Comment not found' });
-  }
-});
-
-app.listen(3000, () => {
-  console.log('Server is listening on port 3000');
+/**
+ * Starts the Express server and listens on the specified port.
+ * @function
+ * @memberof module:express
+ * @param {number} port - The port number on which the server will listen.
+ * @returns {void}
+ */
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
 });
